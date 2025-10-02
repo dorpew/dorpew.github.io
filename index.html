@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dorpew - Desenvolvedor Discord</title>
+
+<meta charset="UTF-8" />
+  <meta property="og:title" content="Dorpew — Portfólio" />
+  <meta property="og:description" content="Portfólio/Perfil de Dorpew, Desenvolvedor de bots & Backend." />
+  <meta property="og:image" content="https://dorpew.vercel.app/img/dorpew.jpg" />
+  <meta property="og:url" content="https://dorpew.vercel.app" />
+  <meta name="theme-color" content="#ffffff"> <!-- cor da embed -->
+    
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+  <img src="https://dorpew.vercel.app/img/apex.png" alt="Apex Night" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+  Dorpew
+            </div>
+            <button class="menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" onclick="closeMenu()">Home</a></li>
+                <li><a href="#sobre" onclick="closeMenu()">Sobre</a></li>
+                <li><a href="#projetos" onclick="closeMenu()">Projetos</a></li>
+                <li><a href="#habilidades" onclick="closeMenu()">Habilidades</a></li>
+                <li><a href="#contato" onclick="closeMenu()">Contato</a></li>
+                <li>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema">
+                        <span id="themeIcon">◐</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="profile-img">
+                    <img src="https://dorpew.vercel.app/img/dorpew.jpg" alt="Dorpew" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E👋%3C/text%3E%3C/svg%3E'">
+                </div>
+                <h1 class="hero-title">Olá, sou Dorpew</h1>
+                <p class="hero-subtitle">Desenvolvedor de Bots & Aplicações Discord</p>
+                <div class="btn-group">
+                    <a href="#projetos" class="btn btn-primary">Ver Projetos</a>
+                    <a href="#contato" class="btn btn-secondary">Contato</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sobre">
+        <div class="container">
+            <h2 class="section-title">Sobre Mim</h2>
+            <div class="about-card">
+                <p>
+                    Desenvolvedor especializado em criar bots e aplicações para Discord. Transformo ideias em soluções 
+                    automatizadas e interativas que melhoram a experiência das comunidades na plataforma.
+                </p>
+                <p>
+                    Além do desenvolvimento, sou entusiasta de jogos como Standoff 2 e Roblox, onde busco sempre 
+                    aliar minha paixão por tecnologia com entretenimento. Essa combinação me permite criar projetos 
+                    únicos que conectam desenvolvimento e gaming.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projetos">
+        <div class="container">
+            <h2 class="section-title">Projetos em Destaque</h2>
+            <div class="projects-container">
+                <button class="slider-btn" id="prevBtn" onclick="changeSlide(-1)">◀</button>
+                
+                <div class="projects-wrapper">
+                    <div class="projects-slider" id="projectsSlider">
+                        <div class="project-card">
+                            <img src="https://dorpew.vercel.app/img/logan.jpg" alt="Logan Bot" class="project-img">
+                            <div class="project-content">
+                                <h3 class="project-title">Logan Bot</h3>
+                                <p class="project-desc">Bot de apostas para Discord com sistema de economia completo, permitindo usuários apostarem e gerenciarem suas moedas virtuais</p>
+                                <div class="tech-tags">
+                                    <span class="tech-tag">Discord.js</span>
+                                    <span class="tech-tag">Node.js</span>
+                                    <span class="tech-tag">Database</span>
+                                </div>
+                                <a href="#" class="project-link">Ver Projeto →</a>
+                            </div>
+                        </div>
+
+                        <div class="project-card">
+                            <img src="https://dorpew.vercel.app/img/god.png" alt="God's Divine Punishment" class="project-img">
+                            <div class="project-content">
+                                <h3 class="project-title">God's Divine Punishment</h3>
+                                <p class="project-desc">Bot avançado com comandos de Ticket(Bot Privado).</p>
+                                <div class="tech-tags">
+                                    <span class="tech-tag">Discord.py</span>
+                                </div>
+                                <a href="#" class="project-link">Ver Projeto →</a>
+                            </div>
+                        </div>
+
+                        <div class="project-card">
+                            <img src="https://dorpew.vercel.app/img/sylv.jpg" alt="Bot Multifuncional" class="project-img">
+                            <div class="project-content">
+                                <h3 class="project-title">Sylv — Bot Multifuncional</h3>
+                                <p class="project-desc">Aplicação Discord com múltiplas funcionalidades incluindo economia, moderação e utilidades</p>
+                                <div class="tech-tags">
+                                    <span class="tech-tag">Aoi.js</span>
+                                    <span class="tech-tag">Discord.js</span>
+                                    <span class="tech-tag">APIs</span>
+                                </div>
+                                <a href="#" class="project-link">Ver Projeto →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="slider-btn" id="nextBtn" onclick="changeSlide(1)">▶</button>
+            </div>
+            
+            <div class="slider-dots" id="sliderDots"></div>
+        </div>
+    </section>
+
+    <section id="habilidades">
+        <div class="container">
+            <h2 class="section-title">Habilidades</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <svg class="skill-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                    </svg>
+                    <h3 class="skill-title">Discord Dev</h3>
+                    <ul class="skill-list">
+                        <li>Discord.js</li>
+                        <li>Bot Development</li>
+                        <li>Slash Commands</li>
+                        <li>Event Handling</li>
+                    </ul>
+                </div>
+
+                <div class="skill-card">
+                    <svg class="skill-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    <h3 class="skill-title">Backend</h3>
+                    <ul class="skill-list">
+                        <li>Node.js</li>
+                        <li>Database Systems</li>
+                        <li>API Integration</li>
+                        <li>Sistema de Economia</li>
+                    </ul>
+                </div>
+
+                <div class="skill-card">
+                    <svg class="skill-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                    </svg>
+                    <h3 class="skill-title">Ferramentas</h3>
+                    <ul class="skill-list">
+                        <li>Git</li>
+                        <li>MongoDB</li>
+                        <li>JSON</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contato">
+        <div class="container">
+            <div class="contact-content">
+                <h2 class="section-title">Vamos Trabalhar Juntos?</h2>
+                <p>Estou sempre aberto a novos projetos e oportunidades. Entre em contato!</p>
+                <div class="social-links">
+                    <a href="mailto:dorpew.contato@gmail.com" class="social-link" title="Email">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </a>
+                    <a href="https://github.com" target="_blank" class="social-link" title="GitHub">
+                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" class="social-link" title="LinkedIn">
+                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Meu Portfólio. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="js/style.js"></script>
+</body>
+</html>
