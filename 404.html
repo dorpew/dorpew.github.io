@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Página não encontrada - Error 404">
+    <title>404 - Página Não Encontrada | Dorpew</title>
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="css/404.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="https://dorpew.vercel.app/img/apex.png" alt="Apex Night" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+                Dorpew
+            </div>
+            <button class="menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/" onclick="closeMenu()">Home</a></li>
+                <li><a href="/#sobre" onclick="closeMenu()">Sobre</a></li>
+                <li><a href="/#projetos" onclick="closeMenu()">Projetos</a></li>
+                <li><a href="/#habilidades" onclick="closeMenu()">Habilidades</a></li>
+                <li><a href="/#contato" onclick="closeMenu()">Contato</a></li>
+                <li>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema">
+                        <span id="themeIcon">◐</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Container de partículas animadas -->
+    <div class="particles"></div>
+
+    <!-- Container principal do erro -->
+    <div class="error-wrapper">
+        <div class="error-container">
+            <div class="error-code">404</div>
+            <h1 class="error-title">Oops! Página Não Encontrada</h1>
+            <p class="error-message">
+                A página que você está procurando não existe ou foi movida. 
+                Que tal voltar para a página inicial?
+            </p>
+            <a href="/" class="btn-home">Voltar para Home</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Dorpew. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="js/404.js"></script>
+</body>
+</html>
