@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dorpew - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(to bottom right, #111827, #1f2937, #000);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        #intro {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #intro.hidden {
+            display: none;
+        }
+
+        .terminal-window {
+            width: 100%;
+            max-width: 900px;
+            height: 600px;
+            background: #1f2937;
+            border-radius: 8px;
+            border: 1px solid #374151;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: #374151;
+            padding: 12px 16px;
+            border-bottom: 1px solid #4b5563;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-button.red { background: #ef4444; }
+        .terminal-button.yellow { background: #eab308; }
+        .terminal-button.green { background: #22c55e; }
+
+        .terminal-title {
+            color: #9ca3af;
+            font-size: 14px;
+            margin-left: 16px;
+        }
+
+        .terminal-content {
+            padding: 24px;
+            height: calc(100% - 50px);
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .terminal-line {
+            margin-bottom: 4px;
+        }
+
+        .command-prompt {
+            color: #22c55e;
+        }
+
+        .command-text {
+            color: white;
+            margin-left: 8px;
+        }
+
+        .output-text {
+            color: #d1d5db;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: #22c55e;
+            animation: blink 1s infinite;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        #main-content {
+            display: none;
+        }
+
+        #main-content.show {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        nav {
+            background: rgba(31, 41, 55, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #374151;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: inherit;
+            text-transform: capitalize;
+            transition: color 0.3s;
+        }
+
+        .nav-links button:hover,
+        .nav-links button.active {
+            color: #22c55e;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 8px;
+            width: 30px;
+            height: 30px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: white;
+            position: absolute;
+            left: 0;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-line:nth-child(1) {
+            top: 6px;
+        }
+
+        .hamburger-line:nth-child(2) {
+            top: 13px;
+        }
+
+        .hamburger-line:nth-child(3) {
+            top: 20px;
+        }
+
+        .mobile-menu-btn.active .hamburger-line:nth-child(1) {
+            top: 13px;
+            transform: rotate(45deg);
+        }
+
+        .mobile-menu-btn.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active .hamburger-line:nth-child(3) {
+            top: 13px;
+            transform: rotate(-45deg);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            z-index: 250;
+            padding: 80px 24px;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .mobile-close-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 8px;
+            width: 40px;
+            height: 40px;
+            z-index: 300;
+            display: none;
+        }
+
+        .mobile-menu.open ~ .mobile-close-btn {
+            display: block;
+        }
+
+        .close-line {
+            width: 100%;
+            height: 3px;
+            background: white;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-line:nth-child(1) {
+            transform: translateY(-50%) rotate(45deg);
+        }
+
+        .close-line:nth-child(2) {
+            transform: translateY(-50%) rotate(-45deg);
+        }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            text-align: center;
+        }
+
+        .mobile-menu-links button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            font-family: inherit;
+            text-transform: capitalize;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .mobile-menu-links button:hover,
+        .mobile-menu-links button.active {
+            color: #22c55e;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .social-links a {
+            color: white;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .social-links a:hover {
+            color: #22c55e;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page {
+            display: none;
+            padding: 80px 24px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .hero-box {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 48px;
+            margin-bottom: 40px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #22c55e, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #d1d5db;
+            margin-bottom: 24px;
+        }
+
+        .hero-description {
+            color: #9ca3af;
+            line-height: 1.8;
+            margin-bottom: 32px;
+            max-width: 800px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #22c55e;
+            color: black;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid #22c55e;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 36px;
+            margin-bottom: 48px;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .project-card {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .project-card:hover {
+            border-color: #22c55e;
+            transform: translateY(-4px);
+        }
+
+        .project-video {
+            position: relative;
+            padding-bottom: 56.25%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        }
+
+        .project-video iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .project-info {
+            padding: 24px;
+        }
+
+        .project-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .project-title:hover {
+            color: #22c55e;
+        }
+
+        .project-desc {
+            color: #9ca3af;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid #374151;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #d1d5db;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .project-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .project-links a:hover {
+            color: #22c55e;
+        }
+
+        .skills-box {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 32px;
+        }
+
+        .skill-item {
+            margin-bottom: 24px;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: #22c55e;
+        }
+
+        .skill-bar-bg {
+            height: 8px;
+            background: #374151;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .skill-bar {
+            height: 100%;
+            background: linear-gradient(to right, #22c55e, #3b82f6);
+            transition: width 1s ease-out;
+        }
+
+        .contact-box {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 32px;
+            display: inline-block;
+        }
+
+        .contact-item {
+            color: #9ca3af;
+            margin-bottom: 8px;
+        }
+
+        .contact-label {
+            color: #22c55e;
+        }
+
+        footer {
+            border-top: 1px solid #374151;
+            padding: 32px 24px;
+            text-align: center;
+            color: #6b7280;
+            margin-top: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .social-links {
+                gap: 8px;
+            }
+
+            .social-links a svg {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .hero-title {
+                font-size: 32px;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .terminal-window {
+                height: 500px;
+            }
+
+            .hero-box {
+                padding: 32px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="intro">
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="terminal-buttons">
+                    <div class="terminal-button red"></div>
+                    <div class="terminal-button yellow"></div>
+                    <div class="terminal-button green"></div>
+                </div>
+                <span class="terminal-title">dorpew@terminal</span>
+            </div>
+            <div class="terminal-content" id="terminal-output"></div>
+        </div>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-links">
+            <button onclick="showPage('home'); toggleMobileMenu();" class="active" data-page-mobile="home">home</button>
+            <button onclick="showPage('projects'); toggleMobileMenu();" data-page-mobile="projects">projects</button>
+            <button onclick="showPage('skills'); toggleMobileMenu();" data-page-mobile="skills">skills</button>
+            <button onclick="showPage('contact'); toggleMobileMenu();" data-page-mobile="contact">contact</button>
+        </div>
+    </div>
+    
+    <button class="mobile-close-btn" id="mobileCloseBtn" onclick="toggleMobileMenu()">
+        <span class="close-line"></span>
+        <span class="close-line"></span>
+    </button>
+
+    <div id="main-content">
+        <nav>
+            <div class="nav-container">
+                <div class="logo">
+                    <span>⚡</span>
+                    <span>dorpew.is-a.dev</span>
+                </div>
+                <div class="nav-links">
+                    <button onclick="showPage('home')" class="active" data-page="home">home</button>
+                    <button onclick="showPage('projects')" data-page="projects">projects</button>
+                    <button onclick="showPage('skills')" data-page="skills">skills</button>
+                    <button onclick="showPage('contact')" data-page="contact">contact</button>
+                </div>
+                <div class="nav-right">
+                    <div class="social-links">
+                        <a href="https://github.com/dorpew" target="_blank" title="GitHub">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="mailto:dorpew.discord@gmail.com" title="Email">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" id="menuBtn">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="page active" id="page-home">
+            <div class="hero-box">
+                <div style="color: #22c55e; margin-bottom: 16px;">
+                    <span id="typing-text"></span><span class="cursor"></span>
+                </div>
+                <h1 class="hero-title">
+                    <span style="color: #22c55e;">></span> Hi, I'm 
+                    <span class="gradient-text">Dorpew</span>
+                </h1>
+                <p class="hero-subtitle">Backend & Apps <span style="color: #6b7280; font-size: 16px;">-# Discord</span></p>
+                <p class="hero-description">
+                    Desenvolvedor especializado em criar bots e aplicações para Discord. 
+                    Transformo ideias em soluções automatizadas e interativas que melhoram 
+                    a experiência das comunidades na plataforma. Também sou apaixonado por 
+                    jogos como Standoff 2 e Roblox.
+                </p>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="showPage('projects')">
+                        Ver Projetos →
+                    </button>
+                    <button class="btn btn-secondary" onclick="showPage('contact')">
+                        Entrar em Contato
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="page-projects">
+            <div class="section-title">
+                <span>📁</span>
+                <span><span style="color: #22c55e;">$</span> ls projects/</span>
+            </div>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-video" style="background: linear-gradient(135deg, #5865F2, #7289DA);">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-title">Suity - Bot Discord</h3>
+                        <p class="project-desc">Bot multifuncional para Discord com sistemas de moderação, música, economia e muito mais. Interface intuitiva e comandos personalizáveis.</p>
+                        <div class="project-tags">
+                            <span class="tag">Discord.js</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">MongoDB</span>
+                            <span class="tag">Moderação</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/dorpew">⚡ Code</a>
+                            <a href="#">🔗 Invite Bot</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-video" style="background: linear-gradient(135deg, #22c55e, #10b981);">
+                        <iframe src="https://www.youtube.com/embed/3JZ_D3ELwOQ" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-title">Logan - Bot Discord</h3>
+                        <p class="project-desc">Sistema avançado de logs e auditoria para servidores Discord. Rastreie todas as ações importantes com notificações em tempo real.</p>
+                        <div class="project-tags">
+                            <span class="tag">Discord.js</span>
+                            <span class="tag">TypeScript</span>
+                            <span class="tag">PostgreSQL</span>
+                            <span class="tag">Logs</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/dorpew">⚡ Code</a>
+                            <a href="#">🔗 Invite Bot</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="page-skills">
+            <div class="section-title">
+                <span>💻</span>
+                <span><span style="color: #22c55e;">$</span> cat skills.json</span>
+            </div>
+            <div class="skills-box">
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span>JavaScript/TypeScript</span>
+                        <span>95%</span>
+                    </div>
+                    <div class="skill-bar-bg">
+                        <div class="skill-bar" style="width: 95%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span>Python</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="skill-bar-bg">
+                        <div class="skill-bar" style="width: 85%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span>React/Next.js</span>
+                        <span>90%</span>
+                    </div>
+                    <div class="skill-bar-bg">
+                        <div class="skill-bar" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span>Node.js/Express</span>
+                        <span>88%</span>
+                    </div>
+                    <div class="skill-bar-bg">
+                        <div class="skill-bar" style="width: 88%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span>Discord.js</span>
+                        <span>92%</span>
+                    </div>
+                    <div class="skill-bar-bg">
+                        <div class="skill-bar" style="width: 92%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span>MongoDB/PostgreSQL</span>
+                        <span>80%</span>
+                    </div>
+                    <div class="skill-bar-bg">
+                        <div class="skill-bar" style="width: 80%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="page-contact">
+            <div class="section-title">
+                <span>📧</span>
+                <span><span style="color: #22c55e;">$</span> ./contact.sh</span>
+            </div>
+            <div style="text-align: center; margin-bottom: 40px;">
+                <p style="font-size: 20px; color: #9ca3af; margin-bottom: 32px;">
+                    Interessado em trabalhar juntos? Vamos conversar!
+                </p>
+                <div class="contact-box">
+                    <div class="contact-item">
+                        <span class="contact-label">email:</span> "dorpew.discord@gmail.com"
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-label">discord:</span> "dorpew"
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-label">github:</span> "github.com/dorpew"
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-label">portfolio:</span> "dorpew.is-a.dev"
+                    </div>
+                </div>
+                <div style="margin-top: 32px;">
+                    <a href="mailto:dorpew.discord@gmail.com" class="btn btn-primary">
+                        📧 Enviar Email
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>$ echo "Made with 💚 by Dorpew" | deployed on is-a.dev</p>
+            <p style="margin-top: 8px; font-size: 14px; color: #4b5563;">© 2025 • Open Source • MIT License</p>
+        </footer>
+    </div>
+
+    <script>
+        const commands = [
+            { type: 'cmd', text: 'dorpew@portfolio:~$', output: 'cd /home/dorpew/portfolio', delay: 100 },
+            { type: 'cmd', text: 'dorpew@portfolio:~/portfolio$', output: 'ls -la', delay: 300 },
+            { type: 'out', text: 'drwxr-xr-x  5 dorpew dorpew  4096 Oct  5 2025 .', delay: 50 },
+            { type: 'out', text: 'drwxr-xr-x 12 dorpew dorpew  4096 Oct  5 2025 ..', delay: 50 },
+            { type: 'out', text: '-rw-r--r--  1 dorpew dorpew  2048 Oct  5 2025 about.json', delay: 50 },
+            { type: 'out', text: '-rw-r--r--  1 dorpew dorpew  8192 Oct  5 2025 projects.js', delay: 50 },
+            { type: 'out', text: '-rw-r--r--  1 dorpew dorpew  4096 Oct  5 2025 skills.js', delay: 50 },
+            { type: 'out', text: '-rwxr-xr-x  1 dorpew dorpew  1024 Oct  5 2025 init.sh', delay: 300 },
+            { type: 'cmd', text: 'dorpew@portfolio:~/portfolio$', output: 'cat about.json', delay: 300 },
+            { type: 'out', text: '{', delay: 50 },
+            { type: 'out', text: '  "name": "Dorpew",', delay: 50 },
+            { type: 'out', text: '  "role": "Discord Bot Developer",', delay: 50 },
+            { type: 'out', text: '  "skills": ["JavaScript", "Python", "Discord.js"],', delay: 50 },
+            { type: 'out', text: '  "passion": ["Gaming", "Coding", "Automation"]', delay: 50 },
+            { type: 'out', text: '}', delay: 300 },
+            { type: 'cmd', text: 'dorpew@portfolio:~/portfolio$', output: 'node init.js', delay: 300 },
+            { type: 'out', text: '> portfolio@1.0.0 start', delay: 100 },
+            { type: 'out', text: '> Building portfolio...', delay: 200 },
+            { type: 'out', text: '✓ Compiled successfully!', delay: 300 },
+            { type: 'cmd', text: 'dorpew@portfolio:~/portfolio$', output: 'npm start', delay: 300 },
+            { type: 'out', text: 'Starting development server...', delay: 200 },
+            { type: 'out', text: 'Loading components... ✓', delay: 200 },
+            { type: 'out', text: 'Server running... ✓', delay: 200 },
+            { type: 'out', text: 'Portfolio ready at https://dorpew.is-a.dev', delay: 500 }
+        ];
+
+        let currentCmd = 0;
+        const terminalOutput = document.getElementById('terminal-output');
+
+        function executeCommand() {
+            if (currentCmd < commands.length) {
+                const cmd = commands[currentCmd];
+                const line = document.createElement('div');
+                line.className = 'terminal-line';
+
+                if (cmd.type === 'cmd') {
+                    line.innerHTML = `<span class="command-prompt">${cmd.text}</span><span class="command-text">${cmd.output}</span>`;
+                } else {
+                    line.innerHTML = `<span class="output-text">${cmd.text}</span>`;
+                }
+
+                terminalOutput.appendChild(line);
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+                currentCmd++;
+
+                setTimeout(executeCommand, cmd.delay);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('intro').classList.add('hidden');
+                    document.getElementById('main-content').classList.add('show');
+                    startTyping();
+                }, 1000);
+            }
+        }
+
+        executeCommand();
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const menuBtn = document.getElementById('menuBtn');
+            const closeBtn = document.getElementById('mobileCloseBtn');
+            
+            menu.classList.toggle('open');
+            menuBtn.classList.toggle('active');
+            
+            if (menu.classList.contains('open')) {
+                closeBtn.style.display = 'block';
+            } else {
+                closeBtn.style.display = 'none';
+            }
+        }
+
+        function showPage(pageName) {
+            const pages = document.querySelectorAll('.page');
+            const buttons = document.querySelectorAll('.nav-links button');
+            const mobileButtons = document.querySelectorAll('.mobile-menu-links button');
+
+            pages.forEach(page => page.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            mobileButtons.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById('page-' + pageName).classList.add('active');
+            
+            const desktopBtn = document.querySelector(`[data-page="${pageName}"]`);
+            const mobileBtn = document.querySelector(`[data-page-mobile="${pageName}"]`);
+            
+            if (desktopBtn) desktopBtn.classList.add('active');
+            if (mobileBtn) mobileBtn.classList.add('active');
+        }
+
+        const typingText = "developer@portfolio:~$ node showcase-projects.js";
+        let charIndex = 0;
+
+        function startTyping() {
+            const element = document.getElementById('typing-text');
+            if (charIndex < typingText.length) {
+                element.textContent += typingText.charAt(charIndex);
+                charIndex++;
+                setTimeout(startTyping, 50);
+            }
+        }
+    </script>
+</body>
+</html>
