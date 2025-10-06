@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | Dorpew</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(to bottom right, #111827, #1f2937, #000);
+            color: white;
+            overflow: hidden;
+        }
+
+        #intro {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #intro.hidden {
+            display: none;
+        }
+
+        .terminal-window {
+            width: 100%;
+            max-width: 900px;
+            height: 600px;
+            background: #1f2937;
+            border-radius: 8px;
+            border: 1px solid #374151;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: #374151;
+            padding: 12px 16px;
+            border-bottom: 1px solid #4b5563;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-button.red { background: #ef4444; }
+        .terminal-button.yellow { background: #eab308; }
+        .terminal-button.green { background: #22c55e; }
+
+        .terminal-title {
+            color: #9ca3af;
+            font-size: 14px;
+            margin-left: 16px;
+        }
+
+        .terminal-content {
+            padding: 24px;
+            height: calc(100% - 50px);
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .terminal-line {
+            margin-bottom: 4px;
+        }
+
+        .command-prompt {
+            color: #22c55e;
+        }
+
+        .command-text {
+            color: white;
+            margin-left: 8px;
+        }
+
+        .output-text {
+            color: #d1d5db;
+        }
+
+        .error-text {
+            color: #ef4444;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: #22c55e;
+            animation: blink 1s infinite;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        #error-page {
+            display: none;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        #error-page.show {
+            display: flex;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: bold;
+            background: linear-gradient(to right, #ef4444, #dc2626);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 40px rgba(239, 68, 68, 0.3);
+        }
+
+        .error-title {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #d1d5db;
+        }
+
+        .error-message {
+            font-size: 20px;
+            color: #9ca3af;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .error-box {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-left: 4px solid #ef4444;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 40px;
+            text-align: left;
+            max-width: 600px;
+        }
+
+        .error-box-title {
+            color: #ef4444;
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .error-box-content {
+            color: #9ca3af;
+            line-height: 1.6;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 32px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #22c55e;
+            color: black;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid #374151;
+        }
+
+        .btn-secondary:hover {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .glitch {
+            animation: glitch 1s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 80px;
+            }
+
+            .error-title {
+                font-size: 32px;
+            }
+
+            .error-message {
+                font-size: 16px;
+            }
+
+            .terminal-window {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Terminal Intro -->
+    <div id="intro">
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="terminal-buttons">
+                    <div class="terminal-button red"></div>
+                    <div class="terminal-button yellow"></div>
+                    <div class="terminal-button green"></div>
+                </div>
+                <span class="terminal-title">dorpew@terminal</span>
+            </div>
+            <div class="terminal-content" id="terminal-output"></div>
+        </div>
+    </div>
+
+    <!-- 404 Error Page -->
+    <div id="error-page">
+        <div class="error-code glitch">404</div>
+        <h1 class="error-title">Page Not Found</h1>
+        <p class="error-message">
+            Oops! A página que você está procurando não existe ou foi movida.
+        </p>
+
+        <div class="error-box">
+            <div class="error-box-title">
+                <span>⚠️</span>
+                <span>ERROR: Resource not found</span>
+            </div>
+            <div class="error-box-content">
+                <p style="margin-bottom: 8px;">Possíveis causas:</p>
+                <p>• A URL pode estar incorreta</p>
+                <p>• A página foi removida ou renomeada</p>
+                <p>• O link pode estar quebrado</p>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <a href="/" class="btn btn-primary">
+                ← Voltar para Home
+            </a>
+            <a href="/projects" class="btn btn-secondary">
+                Ver Projetos
+            </a>
+        </div>
+
+        <p style="color: #6b7280; margin-top: 40px; font-size: 14px;">
+            $ echo "Lost in the void? Let's get you back on track."
+        </p>
+    </div>
+
+    <script>
+        const commands = [
+            { type: 'cmd', text: 'dorpew@portfolio:~$', output: 'cd /var/www/dorpew.is-a.dev', delay: 100 },
+            { type: 'cmd', text: 'dorpew@portfolio:/var/www/dorpew.is-a.dev$', output: 'cat requested-page.html', delay: 300 },
+            { type: 'error', text: 'cat: requested-page.html: No such file or directory', delay: 400 },
+            { type: 'cmd', text: 'dorpew@portfolio:/var/www/dorpew.is-a.dev$', output: 'ls -la | grep requested', delay: 300 },
+            { type: 'error', text: 'Error: File not found', delay: 300 },
+            { type: 'cmd', text: 'dorpew@portfolio:/var/www/dorpew.is-a.dev$', output: 'npm run find-page', delay: 300 },
+            { type: 'error', text: '> Searching...', delay: 200 },
+            { type: 'error', text: '✗ ERROR 404: Page not found', delay: 400 },
+            { type: 'error', text: '✗ Failed to locate resource', delay: 300 },
+            { type: 'cmd', text: 'dorpew@portfolio:/var/www/dorpew.is-a.dev$', output: 'node show-error.js', delay: 400 },
+            { type: 'out', text: 'Initializing error page...', delay: 200 },
+            { type: 'out', text: 'Loading 404 interface...', delay: 200 },
+            { type: 'out', text: '✓ Ready to display error', delay: 500 }
+        ];
+
+        let currentCmd = 0;
+        const terminalOutput = document.getElementById('terminal-output');
+
+        function executeCommand() {
+            if (currentCmd < commands.length) {
+                const cmd = commands[currentCmd];
+                const line = document.createElement('div');
+                line.className = 'terminal-line';
+
+                if (cmd.type === 'cmd') {
+                    line.innerHTML = `<span class="command-prompt">${cmd.text}</span><span class="command-text">${cmd.output}</span>`;
+                } else if (cmd.type === 'error') {
+                    line.innerHTML = `<span class="error-text">${cmd.text}</span>`;
+                } else {
+                    line.innerHTML = `<span class="output-text">${cmd.text}</span>`;
+                }
+
+                terminalOutput.appendChild(line);
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+                currentCmd++;
+
+                setTimeout(executeCommand, cmd.delay);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('intro').classList.add('hidden');
+                    document.getElementById('error-page').classList.add('show');
+                }, 800);
+            }
+        }
+
+        executeCommand();
+    </script>
+</body>
+</html>
