@@ -434,19 +434,22 @@
         }
 
         .project-img {
-            position: relative;
-            padding-bottom: 56.25%;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-        }
+    position: relative;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px; /* espaço interno para a imagem respirar */
+    height: 180px; /* define uma altura fixa agradável */
+    overflow: hidden;
+}
 
-        .project-img img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 80%; /* ajusta a largura da imagem */
-    height: auto; /* mantém a proporção */
-    transform: translate(-50%, -50%); /* centraliza */
-    object-fit: contain; /* garante que a imagem não corte */
+.project-img img {
+    width: auto;
+    height: 100%;
+    max-height: 150px; /* controla o tamanho máximo da imagem */
+    object-fit: contain;
+    border-radius: 8px; /* opcional: dá um toque mais suave */
 }
 
         .project-info {
