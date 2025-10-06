@@ -1,0 +1,64 @@
+            background: linear-gradient(to right, #22c55e, #3b82f6);
+            transition: width 1s ease-out;
+        }
+
+        .contact-box {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 32px;
+            display: inline-block;
+        }
+
+        .contact-item {
+            color: #9ca3af;
+            margin-bottom: 8px;
+        }
+
+        .contact-label {
+            color: #22c55e;
+        }
+
+        footer {
+            border-top: 1px solid #374151;
+            padding: 32px 24px;
+            text-align: center;
+            color: #6b7280;
+            margin-top: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .social-links {
+                gap: 8px;
+            }
+
+            .social-links a svg {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .hero-title {
+                font-size: 32px;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .terminal-window {
+                height: 500px;
+            }
+
+            .hero-box {
+                padding: 32px 24px;
+            }
+        }
+    </style>
